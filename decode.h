@@ -1,7 +1,7 @@
 #include "types.h"
 
 #define MAX_SECRET_BUF_SIZE 1
-#define MAX_FILE_SUFFIX 4
+#define MAX_FILE_SUFFIX 5
 #define MAX_IMAGE_BUF_SIZE (MAX_SECRET_BUF_SIZE * 8)
 
 typedef struct
@@ -12,7 +12,7 @@ typedef struct
 
     char *decode_fname;
     FILE *fptr_decode_file;
-    char extn_decode_file[MAX_FILE_SUFFIX];
+    char decode_file_extn[MAX_FILE_SUFFIX];
     int output_file_size;
     char steg_file_extn[MAX_FILE_SUFFIX];
     char decode_data[MAX_IMAGE_BUF_SIZE];

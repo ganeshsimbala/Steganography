@@ -18,14 +18,15 @@ Status read_and_validate_decode_args(char *argv[], DecodeInfo *decInfo)
     }
 
     // Check if output decode file has .txt extension or use default
-    if (argv[3] != NULL && strcmp(strstr(argv[3], "."), ".txt") == 0)
+    if (argv[3] != NULL)
     {
+        // strstr(argv[3], ".")
+
         decInfo->decode_fname = argv[3];
-        strcpy(decInfo->extn_decode_file, ".txt");
+        // // strcpy(decInfo->extn_decode_file, ".txt");
     }
-    else
-    {
-        decInfo->decode_fname = "decode.txt";
+    else{
+        decInfo->decode_fname="Decoded_File";
     }
 
     return e_success;
@@ -114,7 +115,7 @@ Status open_decode_files(DecodeInfo *decInfo)
         fprintf(stderr, "ERROR: Unable to open file %s\n", decInfo->steged_image_fname);
         return e_failure;
     }
-
+#if 0
     decInfo->fptr_decode_file = fopen(decInfo->decode_fname, "w"); // Open decode file
 
     if (decInfo->fptr_decode_file == NULL)
@@ -124,6 +125,7 @@ Status open_decode_files(DecodeInfo *decInfo)
         remove(decInfo->decode_fname); // Remove incomplete file
         return e_failure;
     }
+#endif
 
     return e_success;
 }
@@ -155,7 +157,7 @@ Status decode_data_from_image(char *data, int len, DecodeInfo *decInfo)
     for (int i = 0; i < len; i++)
     {
         fread(decInfo->decode_data, sizeof(char), 8, decInfo->fptr_steged_image); // Read 8 bytes
-        decode_byte_from_lsb(&data[i], decInfo->decode_data); // Decode one byte from 8 LSBs
+        decode_byte_from_lsb(&data[i], decInfo->decode_data);                     // Decode one byte from 8 LSBs
     }
     return e_success;
 }
@@ -187,7 +189,7 @@ Status decode_numerical_values(int *value, DecodeInfo *decInfo)
     char size[32];
 
     fread(size, sizeof(char), 32, decInfo->fptr_steged_image); // Read 32 bytes
-    decode_int_values_from_lsb(value, size); // Decode integer from LSBs
+    decode_int_values_from_lsb(value, size);                   // Decode integer from LSBs
 
     return e_success;
 }
@@ -209,7 +211,22 @@ Status decode_int_values_from_lsb(int *value, char *bytes)
 // Function to decode file extension
 Status decode_file_extn(DecodeInfo *decInfo)
 {
-    decode_data_from_image(decInfo->steg_file_extn, decInfo->file_extn_size, decInfo); // Decode extension string
+    decode_data_from_image(decInfo->decode_file_extn, decInfo->file_extn_size, decInfo); // Decode extension string
+
+    if (strstr(decInfo->decode_fname, ".") != NULL)
+    {
+        if (strtok(decInfo->decode_fname, ".") != NULL)
+        {
+            strcat(decInfo->decode_fname, decInfo->decode_file_extn);
+            decInfo->fptr_decode_file = fopen(decInfo->decode_fname, "w");
+        }
+    }
+    else
+    {
+        // decInfo->decode_fname = "Decoded_File";
+        decInfo->fptr_decode_file = fopen(decInfo->decode_fname, "w");
+    }
+
     return e_success;
 }
 
@@ -235,8 +252,8 @@ Status extract_secret_data(uint size, DecodeInfo *decInfo)
         char ch;
 
         fread(decInfo->decode_data, sizeof(char), 8, decInfo->fptr_steged_image); // Read 8 bytes
-        decode_byte_from_lsb(&ch, decInfo->decode_data); // Decode one character
-        fwrite(&ch, sizeof(char), 1, decInfo->fptr_decode_file); // Write character to file
+        decode_byte_from_lsb(&ch, decInfo->decode_data);                          // Decode one character
+        fwrite(&ch, sizeof(char), 1, decInfo->fptr_decode_file);                  // Write character to file
     }
     return e_success;
 }

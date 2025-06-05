@@ -15,11 +15,11 @@ int main(int argc, char *argv[])
     /*
     Calling the function to check the operation type
     */
-    if (argc <= 1)
+    if (argc <= 2)
     {
-        printf("Error\nUsage\n");
-        printf("For Encoding : ./a.out -e <image_file.bmp> <secret_text.txt> [output_file.bmp]\n");
-        printf("For Decoding : ./a.out -d <output_file.bmp> [secret file]\n");
+        printf("#########UNSUPPORTED OPERATION############\nUsage\n");
+        printf("For Encoding : ./a.out -e <image_file.bmp> <secret_text> [output_file.bmp]\n");
+        printf("For Decoding : ./a.out -d <Encoded_file.bmp> [secret file]\n");
         return 1;
     }
     else if (check_operation_type(argv) == e_encode)
@@ -99,9 +99,9 @@ OperationType check_operation_type(char *argv[])
     }
     else
     {
-        printf("Unsupported operation\nusage:");
-        printf("For encoding: ./a.out -e <image.bmp> <text.txt> <output.bmp>\n");
-        printf("For decoding : ./a.out -d <output.bmp> <output.txt> \n");
+        printf("##########Unsupported operation##########\nusage:");
+        printf("For encoding: ./a.out -e <image_file.bmp> <text_file> [output.bmp]\n");
+        printf("For decoding : ./a.out -d <Encoded_file.bmp> [output] \n");
         return e_unsupported;
     }
 }
