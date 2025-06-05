@@ -1,0 +1,80 @@
+
+Project Title: Image Steganography using LSB Technique in BMP Files
+
+Project Description:
+This project implements LSB (Least Significant Bit) Image Steganography in C programming language. It allows for hiding and retrieving secret data (typically a text file) within a 24-bit .bmp image file without visibly altering the image. The application supports both encoding (hiding data) and decoding (retrieving hidden data) operations, making it a complete end-to-end solution for simple data concealment using image files.
+
+Objectives:
+- To encode a secret .txt file into a .bmp image using LSBs of pixel bytes.
+- To decode and recover the hidden secret file from a stego image.
+- To ensure that the image visually remains unchanged and unsuspecting.
+
+Project Structure:
+
+Encoding Phase:
+- Takes 3 inputs:
+  1. Source BMP image (.bmp)
+  2. Secret text file (.txt)
+  3. Optional output image filename (.bmp)
+- Embeds:
+  - A magic string to identify stego images (#*)
+  - Secret file’s extension size and extension
+  - Secret file’s size
+  - Actual secret file data
+
+Decoding Phase:
+- Takes 2 inputs:
+  1. Stego BMP image (.bmp)
+  2. Optional output text filename
+- Retrieves:
+  - Magic string (verifies presence of secret data)
+  - File extension size and extension
+  - Secret file size
+  - Secret file content
+
+Core Components:
+
+File               | Purpose
+------------------ | -----------------------------------------------------
+test_encode.c      | Main driver to handle command-line arguments and control the flow (encode/decode)
+encode.c / encode.h| Contains all encoding logic including file handling, LSB encoding, and validations
+decode.c / decode.h| Contains all decoding logic to recover the hidden data from the stego image
+types.h            | Contains custom data types like Status and OperationType
+common.h           | Stores shared constants like MAGIC_STRING
+
+Technologies Used:
+- Language: C
+- Image Format: BMP (24-bit)
+- Technique: LSB (Least Significant Bit) Steganography
+
+How It Works:
+
+Encoding Logic:
+- BMP image data starts after 54 bytes (header)
+- Each byte of the secret file is encoded into 8 bytes of image data, modifying only the LSB
+- This preserves the image's appearance while storing hidden data
+
+Decoding Logic:
+- Starts from the 54th byte of the image
+- Reads 8 bytes at a time, extracts their LSBs, and reconstructs each byte of secret data
+- Verifies the magic string, then reconstructs and saves the secret file
+
+Usage:
+# Encoding
+./a.out -e input.bmp secret.txt [stego_output.bmp]
+
+# Decoding
+./a.out -d stego_output.bmp [recovered_secret.txt]
+
+Example:
+./a.out -e image.bmp message.txt stego.bmp
+# Output: stego.bmp with embedded secret data
+
+./a.out -d stego.bmp recovered.txt
+# Output: recovered.txt with original hidden content
+
+Applications:
+- Secure message sharing
+- Digital watermarking
+- Educational purposes in cryptography/steganography
+- Low-level data hiding in open image files
