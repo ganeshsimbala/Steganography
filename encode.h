@@ -30,6 +30,7 @@ typedef struct _EncodeInfo
     char extn_secret_file[MAX_FILE_SUFFIX];
     char secret_data[MAX_SECRET_BUF_SIZE];
     long size_secret_file;
+    uint file_extn_size;
 
     /* Stego Image Info */
     char *stego_image_fname;

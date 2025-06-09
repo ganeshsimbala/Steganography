@@ -43,7 +43,9 @@ Status read_and_validate_encode_args(char *argv[], EncodeInfo *encInfo)
         // checking for the Secret file extension is .txt or not
         if (argv[3] != NULL && strstr(argv[3], ".") != NULL)
         {
+
             encInfo->secret_fname = argv[3];
+            encInfo->file_extn_size=strlen(strstr(argv[3],"."));
             strcpy(encInfo->extn_secret_file, strstr(argv[3], "."));
 
             // if the destination file is provided A destination file is created with that name
@@ -162,7 +164,7 @@ Status do_encoding(EncodeInfo *encInfo)
         return e_failure;
     }
     // Function call to encode secret file extension size
-    if (encode_secret_file_extn_size(MAX_FILE_SUFFIX, encInfo) == e_success)
+    if (encode_secret_file_extn_size(encInfo->file_extn_size, encInfo) == e_success)
     {
         printf("Secret extension size is encoded Successfully\n");
     }
@@ -328,7 +330,7 @@ Status encode_32_bytes_to_lsb(int value, char *data_buffer)
 // Function to encode Secret file extension
 Status encode_secret_file_extn(char *file_extn, EncodeInfo *encInfo)
 {
-    encode_data_to_image(file_extn, strlen(file_extn), encInfo);
+    encode_data_to_image(file_extn, encInfo->file_extn_size, encInfo);
     return e_success;
 }
 

@@ -101,6 +101,8 @@ Status do_decoding(DecodeInfo *decInfo)
         return e_failure;
     }
 
+    fclose(decInfo->fptr_decode_file);
+
     return e_success;
 }
 
