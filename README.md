@@ -69,7 +69,7 @@ lsb_steganography/
 - BMP file (24-bit)
 
 🔧 Build Instructions
-$ git clone https://github.com/yourusername/lsb-steganography.git
+$ git clone https://github.com/ganeshsimbala/LSB-Image-Steganography.git
 $ cd lsb-steganography
 $ make
 
@@ -115,7 +115,7 @@ Test with:
 
 🧑‍💻 Authors
 ------------
-- Ganesh Simbala — https://github.com/ganesh-simbala
+- Ganesh Simbala — https://github.com/ganeshsimbala
 
 📄 License
 ----------
